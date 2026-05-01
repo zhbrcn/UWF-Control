@@ -1,4 +1,5 @@
-﻿[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+﻿[Console]::InputEncoding = [System.Text.Encoding]::GetEncoding(936)
+[Console]::OutputEncoding = [System.Text.Encoding]::GetEncoding(936)
 
 $Script:ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $Script:LogPath = Join-Path $Script:ScriptDir 'UWF-Manager.log'
@@ -39,7 +40,7 @@ function Run-Command {
     Write-Host "`n正在执行: $Command" -ForegroundColor Cyan
     Write-Log "执行命令: $Command"
     try {
-        $output = cmd.exe /c $Command 2>&1 | Out-String
+        $output = cmd.exe /c "chcp 936>nul & $Command" 2>&1 | Out-String
         if (-not [string]::IsNullOrWhiteSpace($output)) { Write-Host $output.TrimEnd() }
         Write-Log "命令输出:`n$output"
         return $output
